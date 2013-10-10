@@ -66,7 +66,7 @@ public class SplunkLogEvent {
 	/**
 	 * Event prefix fields
 	 */
-	private static final String PREFIX_NAME = "name";
+	private static final String PREFIX_NAME = "SplunkJavaAgent_name";
 	private static final String PREFIX_EVENT_ID = "event_id";
 
 	/**
@@ -1359,6 +1359,13 @@ public class SplunkLogEvent {
 	 * @param value
 	 */
 	public void addPair(String key, String value) {
+
+		//convert ', ' to ','
+		key = key.replaceAll(", ", ",");
+		value = value.replaceAll(", ", ",");
+		//convert spaces to underscores
+		key = key.replaceAll(" ", "_");
+		value = value.replaceAll(" ", "_");
 
 		if (quoteValues)
 			this.eventMessage.append(key).append(KVDELIM).append(QUOTE)

@@ -188,9 +188,21 @@ public class SplunkJavaAgent {
 		return true;
 	}
 
-	private boolean initCommonProperties() {
+	private boolean initCommonProperties() throws IOException {
 
-		this.appName = props.getProperty("agent.app.name", "");
+		//this.appName = props.getProperty("agent.app.name", "");
+		//this.appName = new Exception().fillInStackTrace().getStackTrace()[0].getClassName();
+
+		//make the name the PID
+		//http://blog.igorminar.com/2007/03/how-java-application-can-discover-its.html
+  		byte[] bo = new byte[100];
+  		String[] cmd = {"bash", "-c", "echo $PPID"};
+  		Process p = Runtime.getRuntime().exec(cmd);
+  		p.getInputStream().read(bo);
+		double d = Double.parseDouble(new String(bo));
+		int di = (int) d;
+  		this.appName = String.valueOf(di);
+
 		this.appID = props.getProperty("agent.app.instance", "");
 
 		String tags = (String) props.getProperty("agent.userEventTags", "");

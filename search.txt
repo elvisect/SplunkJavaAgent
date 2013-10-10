@@ -1,0 +1,3 @@
+index="splunkjavaagent" | transaction appName className methodName startswith="method_entered" endswith="method_exited" | rex max_match=0 "(?P<method_time>\d+)\sname=" 
+| eval duration=tonumber(mvindex(method_time, 0))-tonumber(mvindex(method_time, 1))
+| timechart perc90(duration) by methodName 
